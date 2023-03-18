@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/vue.js"></script>
+    <title>Document</title>
+    <style>
+        .captcha{
+            width: 500px;
+            height: 500px;
+        }
+        .captcha > div{
+            height: 50%;
+            display: flex;
+        }
+        .captcha > div > div{
+            width: 50%;
+            border: solid 1px #ccc;
+        }
+        .full{
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h3>{{mode == "row" ? "水平" : "垂直"}}</h3>
+        <button @click="this.mode = this.mode == 'row' ? 'col' : 'row'">切換驗證模式</button>
+        <br><br>
+        <h3>{{success ? "驗證成功" : "驗證失敗"}}</h3>
+        <button @click="check">驗證</button>
+        <div class="captcha">
+            <div v-for="(item,idx) in captcha">
+                <div v-for="(item2,idx2) in item" @click="captcha[idx][idx2] = !captcha[idx][idx2]" :class="{'full':item2}"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let vue = Vue.createApp({
+            data() {
+                return {
+                    captcha:[
+                        [false,false],
+                        [false,false]
+                    ],
+                    mode:"row",
+                    success:false
+                }
+            },
+            methods: {
+                check(){
+                    let result = false;
+                    if(this.mode == "row"){
+                        result = this.captcha.filter(item=>item[0] && item[1]).length > 0;
+                    }else{
+                        result = this.captcha[0].filter(item=>item).length > 0 && this.captcha[1].filter(item=>item).length > 0;
+                    }
+                    if (result) result = [...this.captcha[0],...this.captcha[1]].filter(item=>item).length <= 2; 
+                    this.success = result;
+                }
+            }
+        }).mount("#app")
+    </script>
+</body>
+</html>
