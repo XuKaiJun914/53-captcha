@@ -55,7 +55,9 @@
                     if(this.mode == "row"){
                         result = this.captcha.filter(item=>item[0] && item[1]).length > 0;
                     }else{
-                        result = this.captcha[0].filter(item=>item).length > 0 && this.captcha[1].filter(item=>item).length > 0;
+                        for(let i = 0;i < this.captcha[0].length;i++){
+                            if (this.captcha[0][i] && this.captcha[1][i]) result = true
+                        }
                     }
                     if (result) result = [...this.captcha[0],...this.captcha[1]].filter(item=>item).length <= 2; 
                     this.success = result;
